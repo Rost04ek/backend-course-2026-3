@@ -34,9 +34,10 @@ const rawData = fs.readFileSync(options.input, 'utf-8');
 let flightsData;
 
 try {
-  flightsData = JSON.parse(rawData);
+  const lines = rawData.split('\n').filter(line => line.trim() !== '');
+    flightsData = lines.map(line => JSON.parse(line));
 } catch (error) {
-  console.error('Помилка парсингу JSON файлу. Переконайтесь, що файл коректний.');
+  console.error('Точна помилка парсингу:', error.message);
   process.exit(1);
 }
 
