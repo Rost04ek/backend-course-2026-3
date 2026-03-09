@@ -7,7 +7,7 @@ program
   .version('1.0.0');
 
 program
-  .option('-i, --input <path>', 'шлях до файлу для читання')
+  .requiredOption('-i, --input <path>', 'шлях до файлу для читання')
   .option('-o, --output <path>', 'шлях до файлу для запису результату')
   .option('-d, --display', 'вивести результат у консоль');
 
