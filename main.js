@@ -15,10 +15,20 @@ program
   .option('--date', 'Відображати дату перед інформацією про відстань та час')
   .option('-a, --airtime <number>', 'Відображати лише записи, час у повітрі яких довший за заданий');
 
+// Part 1
+program.configureOutput({
+  outputError: (str, write) => {
+    if (str.includes('-i, --input')) {
+      write('Please, specify input file\n');
+    } else {
+      write(str);
+    }
+  }
+});
+
 program.parse(process.argv);
 const options = program.opts();
 
-// Part 1
 if (!options.input) {
   console.error('Please, specify input file');
   process.exit(1);
