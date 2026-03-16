@@ -15,7 +15,6 @@ program
   .option('--date', 'Відображати дату перед інформацією про відстань та час')
   .option('-a, --airtime <number>', 'Відображати лише записи, час у повітрі яких довший за заданий');
 
-// Part 1
 program.configureOutput({
   outputError: (str, write) => {
     if (str.includes('-i, --input')) {
@@ -39,7 +38,6 @@ if (!fs.existsSync(options.input)) {
   process.exit(1);
 }
 
-// Part 2
 const rawData = fs.readFileSync(options.input, 'utf-8');
 let flightsData;
 
@@ -62,19 +60,22 @@ if (options.airtime) {
   });
 }
 
-const formattedResultArray = processedData.map(flight => {
-  if (options.date) {
-    return `${flight.FL_DATE} ${flight.AIR_TIME} ${flight.DISTANCE}`;
+const outStream = options.output ? fs.createWriteStream(options.output, { encoding: 'utf-8' }) : null;
+
+processedData.forEach((flight, index) => {
+  const line = options.date
+    ? `${flight.FL_DATE} ${flight.AIR_TIME} ${flight.DISTANCE}`
+    : `${flight.AIR_TIME} ${flight.DISTANCE}`;
+
+  if (options.display) {
+    console.log(line);
   }
-  return `${flight.AIR_TIME} ${flight.DISTANCE}`;
+
+  if (outStream) {
+    outStream.write(index === 0 ? line : '\n' + line);
+  }
 });
 
-const finalOutputString = formattedResultArray.join('\n');
-
-if (options.display) {
-  console.log(finalOutputString);
-}
-
-if (options.output) {
-  fs.writeFileSync(options.output, finalOutputString, 'utf-8');
+if (outStream) {
+  outStream.end();
 }
