@@ -79,3 +79,4 @@ processedData.forEach((flight, index) => {
 if (outStream) {
   outStream.end();
 }
+
